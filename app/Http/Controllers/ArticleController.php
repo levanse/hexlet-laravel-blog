@@ -35,6 +35,8 @@ class ArticleController extends Controller
             'body' => 'required|min:1000',
         ]);
 
+        $request->session()->flash('success', 'Статья успешно добавлена');
+
         $article = new Article();
         $article->fill($data);
         $article->save();
