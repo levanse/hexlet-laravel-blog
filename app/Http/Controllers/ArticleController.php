@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -28,12 +29,9 @@ class ArticleController extends Controller
         return view('article.create', compact('article'));
     }
 
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $data = $this->validate($request, [
-            'name' => 'required|unique:articles',
-            'body' => 'required|min:1000',
-        ]);
+        $data = $request->validated();
 
         $request->session()->flash('success', 'Статья успешно добавлена');
 
@@ -59,6 +57,8 @@ class ArticleController extends Controller
             'name' => 'required|unique:articles,name,' . $article->id,
             'body' => 'required|min:100',
         ]);
+
+        $request->session()->flash('success', 'Статья обновлена');
 
         $article->fill($data);
         $article->save();
